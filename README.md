@@ -1,3 +1,7 @@
+# Description
+
+This is an attempt to build a complete path from project requirements sorting to project development using AI agents
+
 # ATeam Web - 智能项目管理系统前端
 
 基于 React + TypeScript + Ant Design Pro 构建的智能项目管理系统前端应用。
@@ -6,7 +10,7 @@
 
 - 📊 项目管理 - 创建、编辑、查看项目信息
 - 👥 团队管理 - 团队成员管理和权限控制
-- 📋 Scrum看板 - 可视化任务管理
+- 📋 Scrum 看板 - 可视化任务管理
 - 📄 文档管理 - 项目文档的创建和管理
 - 🎯 仪表盘 - 项目和团队的统计概览
 
@@ -57,4 +61,4 @@ src/
 
 ## 环境变量
 
-- `API_BASE_URL` - 后端API地址，默认为 `http://localhost:3000/api`
+- `API_BASE_URL` - 后端 API 地址，默认为 `http://localhost:3000/api`
