@@ -1,0 +1,33 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* 重置所有布局样式 */
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  height: 100vh;
+}
+
+/* 清理可能的样式冲突 */
+.ant-pro-layout,
+.ant-pro-sider-menu {
+  display: none !important;
+}
+
+/* 允许 PageContainer 正常显示 */
+.ant-pro-page-container {
+  display: block !important;
+}
