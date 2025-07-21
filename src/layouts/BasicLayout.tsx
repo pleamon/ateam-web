@@ -13,7 +13,7 @@ import {
   UserOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
-import { projectAPI } from '@/services/api';
+import { getProjects, type Project } from '@/services/project';
 
 const { Header, Sider, Content } = Layout;
 
@@ -119,7 +119,7 @@ const menuItems = [
 const BasicLayout: React.FC = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
-  const [projects, setProjects] = useState<API.Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const { currentProject, setCurrentProject, currentProjectId } = useModel('useProjectModel');
   const { currentUser, logoutUser } = useModel('user');
   
@@ -134,9 +134,15 @@ const BasicLayout: React.FC = () => {
     return [];
   };
 
+  const [openKeys, setOpenKeys] = useState<string[]>(getOpenKeys());
+
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  useEffect(() => {
+    setOpenKeys(getOpenKeys());
+  }, [location.pathname]);
 
   useEffect(() => {
     // 从 localStorage 恢复上次选中的项目
@@ -151,9 +157,9 @@ const BasicLayout: React.FC = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await projectAPI.list();
+      const response = await getProjects();
       if (response.success && response.data) {
-        setProjects(response.data);
+        setProjects(response.data.list || []);
       }
     } catch (error) {
       console.error('Failed to fetch projects:', error);
@@ -163,6 +169,10 @@ const BasicLayout: React.FC = () => {
   const handleProjectChange = (projectId: string) => {
     const project = projects.find(p => p.id === projectId);
     setCurrentProject(project || null);
+  };
+
+  const onOpenChange = (keys: string[]) => {
+    setOpenKeys(keys);
   };
 
   const userMenuItems = [
@@ -208,8 +218,8 @@ const BasicLayout: React.FC = () => {
           theme="dark"
           mode="inline"
           selectedKeys={[location.pathname]}
-          defaultOpenKeys={getOpenKeys()}
-          openKeys={collapsed ? [] : getOpenKeys()}
+          openKeys={collapsed ? [] : openKeys}
+          onOpenChange={onOpenChange}
           items={menuItems}
         />
       </Sider>

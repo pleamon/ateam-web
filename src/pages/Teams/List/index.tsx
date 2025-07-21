@@ -4,7 +4,7 @@ import { Button, Space, Avatar, Modal, Form, Input, message, Tag, Empty } from '
 import { PlusOutlined, UserOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
 import { history, useModel } from 'umi';
-import { teamAPI } from '@/services/api';
+import { teamAPI } from '@/services/team';
 
 const { confirm } = Modal;
 
@@ -150,8 +150,8 @@ const TeamList: React.FC = () => {
   if (!currentProjectId) {
     return (
       <PageContainer>
-        <Empty 
-          description="请先选择一个项目" 
+        <Empty
+          description="请先选择一个项目"
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       </PageContainer>
@@ -177,7 +177,7 @@ const TeamList: React.FC = () => {
         columns={columns}
         request={async (params) => {
           try {
-            const requestParams = currentProjectId 
+            const requestParams = currentProjectId
               ? { ...params, projectId: currentProjectId }
               : params;
             const response = await teamAPI.list(requestParams);

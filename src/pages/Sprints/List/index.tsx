@@ -4,7 +4,7 @@ import { Button, Space, Tag, Modal, Form, Input, DatePicker, Select, message, Em
 import { PlusOutlined, ExclamationCircleOutlined, ThunderboltOutlined, PauseOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
 import { history, useModel } from 'umi';
-import { sprintAPI } from '@/services/api';
+import { getSprints, getSprint, createSprint, updateSprint, deleteSprint } from '@/services/sprint';
 import moment from 'moment';
 
 const { confirm } = Modal;
@@ -104,7 +104,7 @@ const SprintList: React.FC = () => {
       cancelText: '取消',
       onOk: async () => {
         try {
-          await sprintAPI.delete(record.id);
+          await deleteSprint(record.id);
           message.success('删除成功');
           tableRef.current?.reload();
         } catch (error) {
@@ -123,7 +123,7 @@ const SprintList: React.FC = () => {
         endDate: endDate.toISOString(),
         dateRange: undefined,
       };
-      await sprintAPI.create(payload);
+      await createSprint(payload);
       message.success('创建成功');
       setCreateModalVisible(false);
       form.resetFields();
@@ -166,7 +166,7 @@ const SprintList: React.FC = () => {
             const requestParams = currentProjectId 
               ? { ...params, projectId: currentProjectId }
               : params;
-            const response = await sprintAPI.list(requestParams);
+            const response = await getSprints(requestParams);
             return {
               data: response.data || [],
               success: response.success,

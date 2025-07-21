@@ -3,7 +3,9 @@ import { PageContainer, ProDescriptions } from '@ant-design/pro-components';
 import { Card, Button, Space, Timeline, Tag, Row, Col, Progress, List, Modal, Form, Input, DatePicker, Select, message, Tabs } from 'antd';
 import { ArrowLeftOutlined, EditOutlined, DeleteOutlined, PlusOutlined, RocketOutlined, FlagOutlined, TagOutlined, CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { history, useParams } from 'umi';
-import { roadmapAPI, milestoneAPI, versionAPI } from '@/services/api';
+import { roadmapAPI } from '@/services/roadmap';
+import { milestoneAPI } from '@/services/milestone';
+import { versionAPI } from '@/services/version';
 import moment from 'moment';
 
 const { TextArea } = Input;

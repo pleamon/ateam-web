@@ -4,7 +4,8 @@ import { Button, Space, Tag, Modal, Form, Input, DatePicker, Select, message, Pr
 import { PlusOutlined, ExclamationCircleOutlined, RocketOutlined, CheckCircleOutlined, ClockCircleOutlined, StopOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
 import { history, useModel } from 'umi';
-import { roadmapAPI, projectAPI } from '@/services/api';
+import { roadmapAPI } from '@/services/roadmap';
+import { projectAPI } from '@/services/project';
 import moment from 'moment';
 
 const { confirm } = Modal;

@@ -12,7 +12,7 @@ import {
   FileDoneOutlined,
   ThunderboltOutlined
 } from '@ant-design/icons';
-import { dashboardAPI } from '@/services/api';
+import { getDashboardStats, getProjectDashboard } from '@/services/dashboard';
 import { Pie, Column } from '@ant-design/plots';
 import { history, useModel } from 'umi';
 
@@ -72,10 +72,10 @@ const Dashboard: React.FC = () => {
       let response;
       if (currentProjectId) {
         // 如果选中了项目，获取项目特定的仪表盘数据
-        response = await dashboardAPI.getProjectDashboard(currentProjectId);
+        response = await getProjectDashboard(currentProjectId);
       } else {
         // 否则获取整体仪表盘数据
-        response = await dashboardAPI.getStats();
+        response = await getDashboardStats();
       }
       if (response && response.data) {
         setData(response.data);

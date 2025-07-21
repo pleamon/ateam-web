@@ -3,7 +3,8 @@ import { PageContainer, ProDescriptions } from '@ant-design/pro-components';
 import { Card, Tag, Button, Space, Progress, Row, Col, List, Avatar, message } from 'antd';
 import { ArrowLeftOutlined, EditOutlined, DeleteOutlined, ThunderboltOutlined, PauseOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { history, useParams } from 'umi';
-import { sprintAPI, taskAPI } from '@/services/api';
+import { getSprint } from '@/services/sprint';
+import { getTasks } from '@/services/task';
 import moment from 'moment';
 
 const SprintDetail: React.FC = () => {
@@ -22,7 +23,7 @@ const SprintDetail: React.FC = () => {
   const fetchSprintDetail = async () => {
     try {
       setLoading(true);
-      const response = await sprintAPI.get(id!);
+      const response = await getSprint(id!);
       if (response.success && response.data) {
         setSprint(response.data);
       }
@@ -35,7 +36,7 @@ const SprintDetail: React.FC = () => {
 
   const fetchSprintTasks = async () => {
     try {
-      const response = await taskAPI.list({ sprintId: id });
+      const response = await getTasks({ sprintId: id });
       if (response.success && response.data) {
         setTasks(response.data);
       }

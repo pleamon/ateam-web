@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-components';
 import { Card, Row, Col, Statistic, List, Tag, Typography } from 'antd';
 import { FileTextOutlined, QuestionCircleOutlined, BookOutlined, ApartmentOutlined, BulbOutlined, ReadOutlined } from '@ant-design/icons';
-import { documentAPI } from '@/services/api';
+import { documentAPI } from '@/services/document';
 import { history } from 'umi';
 
 const { Title, Paragraph } = Typography;

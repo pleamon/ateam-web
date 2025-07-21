@@ -3,7 +3,8 @@ import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button, Space, Tag, Modal, Form, Input, DatePicker, Select, message, Empty } from 'antd';
 import { PlusOutlined, ExclamationCircleOutlined, FlagOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
-import { milestoneAPI, roadmapAPI } from '@/services/api';
+import { milestoneAPI } from '@/services/milestone';
+import { roadmapAPI } from '@/services/roadmap';
 import { useModel } from 'umi';
 import moment from 'moment';
 

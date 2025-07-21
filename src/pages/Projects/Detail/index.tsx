@@ -3,7 +3,7 @@ import { PageContainer, ProCard, ProTable } from '@ant-design/pro-components';
 import { useParams } from 'umi';
 import { Descriptions, Card, Tabs, Spin, Empty, Tag, Space, Button, Modal, Form, Input, message } from 'antd';
 import { FileTextOutlined, CheckCircleOutlined, ClockCircleOutlined, EditOutlined } from '@ant-design/icons';
-import { projectAPI } from '@/services/api';
+import { getProject, updateProject } from '@/services/project';
 import type { ProColumns } from '@ant-design/pro-components';
 
 const ProjectDetail: React.FC = () => {
@@ -22,7 +22,7 @@ const ProjectDetail: React.FC = () => {
     
     setLoading(true);
     try {
-      const response = await projectAPI.get(id);
+      const response = await getProject(id);
       if (response.success) {
         setProject(response.data);
       }
@@ -47,7 +47,7 @@ const ProjectDetail: React.FC = () => {
     if (!id) return;
     
     try {
-      const response = await projectAPI.update(id, values);
+      const response = await updateProject(id, values);
       if (response.success) {
         message.success('项目更新成功');
         setEditModalVisible(false);

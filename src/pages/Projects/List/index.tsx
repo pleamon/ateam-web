@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
-import { Button, Space, Modal, Form, Input, message } from 'antd';
+import { Button, Space, Modal, Form, Input, message, DatePicker } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
-import { history } from 'umi';
-import { projectAPI } from '@/services/api';
+import { history, useModel } from '@umijs/max';
+import { getProjects, createProject, type Project } from '@/services/project';
+import { getTeams } from '@/services/team';
+import moment from 'moment';
 
 
 const ProjectList: React.FC = () => {
@@ -12,7 +14,7 @@ const ProjectList: React.FC = () => {
   const [form] = Form.useForm();
   const tableRef = React.useRef<any>();
 
-  const columns: ProColumns<API.Project>[] = [
+  const columns: ProColumns<Project>[] = [
     {
       title: '项目名称',
       dataIndex: 'name',
@@ -30,16 +32,26 @@ const ProjectList: React.FC = () => {
       ellipsis: true,
     },
     {
-      title: '任务数',
-      dataIndex: 'tasks',
-      key: 'taskCount',
-      render: (tasks: API.Task[]) => tasks?.length || 0,
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      valueEnum: {
+        active: { text: '进行中', status: 'Processing' },
+        completed: { text: '已完成', status: 'Success' },
+        archived: { text: '已归档', status: 'Default' },
+      },
     },
     {
-      title: '文档数',
-      dataIndex: 'documentation',
-      key: 'docCount',
-      render: (docs: API.Documentation[]) => docs?.length || 0,
+      title: '开始日期',
+      dataIndex: 'startDate',
+      key: 'startDate',
+      valueType: 'date',
+    },
+    {
+      title: '结束日期',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      valueType: 'date',
     },
     {
       title: '创建时间',
@@ -68,11 +80,19 @@ const ProjectList: React.FC = () => {
 
   const handleCreate = async (values: any) => {
     try {
-      await projectAPI.create(values);
-      message.success('创建成功');
-      setCreateModalVisible(false);
-      form.resetFields();
-      tableRef.current?.reload();
+      const response = await createProject({
+        ...values,
+        startDate: values.startDate.format('YYYY-MM-DD'),
+        endDate: values.endDate ? values.endDate.format('YYYY-MM-DD') : undefined,
+      });
+      if (response.success) {
+        message.success('创建成功');
+        setCreateModalVisible(false);
+        form.resetFields();
+        tableRef.current?.reload();
+      } else {
+        message.error(response.message || '创建失败');
+      }
     } catch (error) {
       message.error('创建失败');
     }
@@ -80,7 +100,7 @@ const ProjectList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.Project>
+      <ProTable<Project>
         headerTitle="项目列表"
         actionRef={tableRef}
         rowKey="id"
@@ -97,11 +117,14 @@ const ProjectList: React.FC = () => {
         columns={columns}
         request={async (params) => {
           try {
-            const response = await projectAPI.list(params);
+            const response = await getProjects({
+              page: params.current,
+              pageSize: params.pageSize,
+            });
             return {
-              data: response.data || [],
+              data: response.data?.list || [],
               success: response.success,
-              total: response.data?.length || 0,
+              total: response.data?.total || 0,
             };
           } catch (error) {
             return {
@@ -139,6 +162,26 @@ const ProjectList: React.FC = () => {
             label="项目描述"
           >
             <Input.TextArea rows={4} placeholder="请输入项目描述" />
+          </Form.Item>
+          <Form.Item
+            name="teamId"
+            label="所属团队"
+            rules={[{ required: true, message: '请选择所属团队' }]}
+          >
+            <Input placeholder="请输入团队ID" />
+          </Form.Item>
+          <Form.Item
+            name="startDate"
+            label="开始日期"
+            rules={[{ required: true, message: '请选择开始日期' }]}
+          >
+            <DatePicker style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item
+            name="endDate"
+            label="结束日期"
+          >
+            <DatePicker style={{ width: '100%' }} />
           </Form.Item>
         </Form>
       </Modal>

@@ -3,7 +3,7 @@ import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button, Space, Tag, Modal, Form, Input, Select, Switch, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
-import { promptTemplateAPI } from '@/services/api';
+import { getPromptTemplates, createPromptTemplate, updatePromptTemplate, deletePromptTemplate, initializePromptTemplates } from '@/services/promptTemplate';
 
 const { TextArea } = Input;
 const { confirm } = Modal;
@@ -107,7 +107,7 @@ const PromptTemplates: React.FC = () => {
       cancelText: '取消',
       onOk: async () => {
         try {
-          await promptTemplateAPI.delete(record.id);
+          await deletePromptTemplate(record.id);
           message.success('删除成功');
           tableRef.current?.reload();
         } catch (error) {
@@ -120,10 +120,10 @@ const PromptTemplates: React.FC = () => {
   const handleSubmit = async (values: any) => {
     try {
       if (editingTemplate) {
-        await promptTemplateAPI.update(editingTemplate.id, values);
+        await updatePromptTemplate(editingTemplate.id, values);
         message.success('更新成功');
       } else {
-        await promptTemplateAPI.create(values);
+        await createPromptTemplate(values);
         message.success('创建成功');
       }
       setCreateModalVisible(false);
@@ -141,7 +141,7 @@ const PromptTemplates: React.FC = () => {
       content: '这将创建系统预定义的提示词模板，确定继续吗？',
       onOk: async () => {
         try {
-          await promptTemplateAPI.initialize();
+          await initializePromptTemplates();
           message.success('初始化成功');
           tableRef.current?.reload();
         } catch (error) {
@@ -175,7 +175,7 @@ const PromptTemplates: React.FC = () => {
         columns={columns}
         request={async (params) => {
           try {
-            const response = await promptTemplateAPI.list();
+            const response = await getPromptTemplates();
             return {
               data: response.data || [],
               success: response.success,

@@ -31,7 +31,7 @@ export default function useUserModel() {
   const loginUser = useCallback(async (username: string, password: string) => {
     setLoading(true);
     try {
-      const response = await login({ username, password });
+      const response = await login({ usernameOrEmail: username, password });
       if (response.success && response.data) {
         const { user, token } = response.data;
         

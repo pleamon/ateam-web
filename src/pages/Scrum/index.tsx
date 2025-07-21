@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-components';
 import { Card, Col, Row, Tag, Avatar, Space, Spin, Button, Modal, Form, Input, Select, DatePicker, message, Empty } from 'antd';
 import { UserOutlined, ClockCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { taskAPI, projectAPI, teamAPI } from '@/services/api';
+import { getTasks, createTask, updateTask } from '@/services/task';
+import { getProjects } from '@/services/project';
+import { getTeams } from '@/services/team';
 import { useModel } from 'umi';
 import './index.css';
 
@@ -51,9 +53,9 @@ const ScrumBoard: React.FC = () => {
     setLoading(true);
     try {
       const [tasksRes, projectsRes, teamsRes] = await Promise.all([
-        taskAPI.list(currentProjectId ? { projectId: currentProjectId } : {}),
-        projectAPI.list(),
-        teamAPI.list(currentProjectId ? { projectId: currentProjectId } : {}),
+        getTasks(currentProjectId ? { projectId: currentProjectId } : {}),
+        getProjects(),
+        getTeams(currentProjectId ? { projectId: currentProjectId } : {}),
       ]);
 
       setTasks(tasksRes.data || []);
@@ -67,13 +69,13 @@ const ScrumBoard: React.FC = () => {
     }
   };
   const fetchTasks = async () => {
-    const res = await taskAPI.list(currentProjectId ? { projectId: currentProjectId } : {});
+    const res = await getTasks(currentProjectId ? { projectId: currentProjectId } : {});
     setTasks(res.data || []);
   };
 
   const handleCreateTask = async (values: any) => {
     try {
-      await taskAPI.create({
+      await createTask({
         ...values,
         dueDate: values.dueDate?.toISOString(),
         status: selectedStatus,
@@ -89,7 +91,7 @@ const ScrumBoard: React.FC = () => {
 
   const handleStatusChange = async (taskId: string, newStatus: string) => {
     try {
-      await taskAPI.updateStatus(taskId, newStatus);
+      await updateTask(taskId, { status: newStatus });
       message.success('更新状态成功');
       // fetchData();
       fetchTasks();

@@ -3,7 +3,8 @@ import { PageContainer, ProCard } from '@ant-design/pro-components';
 import { useParams } from 'umi';
 import { Descriptions, Card, List, Avatar, Tag, Spin, Empty, Button, Modal, Form, Input, Select, message, Space } from 'antd';
 import { UserOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { teamAPI, promptTemplateAPI } from '@/services/api';
+import { getTeam, updateTeam, addTeamMember, removeTeamMember, updateTeamMember } from '@/services/team';
+import { getPromptTemplates, getPromptTemplatesByResponsibility } from '@/services/promptTemplate';
 
 const TeamDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,7 +26,7 @@ const TeamDetail: React.FC = () => {
     
     setLoading(true);
     try {
-      const response = await teamAPI.get(id);
+      const response = await getTeam(id);
       if (response.success) {
         setTeam(response.data);
       }
@@ -38,7 +39,7 @@ const TeamDetail: React.FC = () => {
 
   const fetchPromptTemplates = async () => {
     try {
-      const response = await promptTemplateAPI.list(true);
+      const response = await getPromptTemplates(true);
       if (response.success) {
         setPromptTemplates(response.data || []);
       }
@@ -50,7 +51,7 @@ const TeamDetail: React.FC = () => {
   const handleResponsibilityChange = async (responsibility: string) => {
     // 当职责变化时，加载对应的提示词模板
     try {
-      const response = await promptTemplateAPI.getByResponsibility(responsibility);
+      const response = await getPromptTemplatesByResponsibility(responsibility);
       if (response.success && response.data.length > 0) {
         // 如果有对应的模板，默认选择第一个
         const defaultTemplate = response.data[0];
@@ -63,7 +64,7 @@ const TeamDetail: React.FC = () => {
 
   const handleAddMember = async (values: any) => {
     try {
-      await teamAPI.addMember(id!, values);
+      await addTeamMember(id!, values);
       message.success('添加成员成功');
       setAddMemberVisible(false);
       form.resetFields();
@@ -88,7 +89,7 @@ const TeamDetail: React.FC = () => {
     if (!currentMember) return;
     
     try {
-      await teamAPI.updateMember(id!, currentMember.id, values);
+      await updateTeamMember(id!, currentMember.id, values);
       message.success('更新成员成功');
       setEditMemberVisible(false);
       form.resetFields();
@@ -103,7 +104,7 @@ const TeamDetail: React.FC = () => {
       title: '确定移除该成员吗？',
       onOk: async () => {
         try {
-          await teamAPI.removeMember(id!, memberId);
+          await removeTeamMember(id!, memberId);
           message.success('移除成员成功');
           fetchTeamDetail();
         } catch (error) {

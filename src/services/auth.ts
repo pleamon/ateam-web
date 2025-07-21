@@ -1,7 +1,7 @@
 import { request } from '@umijs/max';
 
 export interface LoginParams {
-  username: string;
+  usernameOrEmail: string;
   password: string;
 }
 
@@ -17,8 +17,12 @@ export interface UserInfo {
   email: string;
   username: string;
   name?: string;
+  nickname?: string;
   avatar?: string;
   role: string;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // 用户登录

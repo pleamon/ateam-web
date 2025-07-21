@@ -4,7 +4,8 @@ import { Button, Space, Tag, Modal, Form, Input, Select, message } from 'antd';
 import { PlusOutlined, FileTextOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
 import { history } from 'umi';
-import { documentAPI, projectAPI } from '@/services/api';
+import { documentAPI } from '@/services/document';
+import { projectAPI } from '@/services/project';
 
 const { confirm } = Modal;
 const { TextArea } = Input;

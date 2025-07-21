@@ -1,10 +1,9 @@
-import { defineConfig } from 'umi';
+import { defineConfig } from '@umijs/max';
 
 export default defineConfig({
-  plugins: [
-    '@umijs/plugins/dist/model',
-  ],
   model: {},
+  request: {},
+  initialState: {},
   title: 'ATeam - 智能项目管理',
   routes: [
     {
@@ -118,7 +117,7 @@ export default defineConfig({
   // 配置代理
   proxy: {
     '/api': {
-      target: 'http://localhost:3000',
+      target: 'http://localhost:3001',
       changeOrigin: true,
     },
   },

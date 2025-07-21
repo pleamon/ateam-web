@@ -3,7 +3,7 @@ import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button, Space, Tag, Modal, Form, Input, Select, message } from 'antd';
 import { PlusOutlined, FileTextOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ProColumns } from '@ant-design/pro-components';
-import { documentAPI } from '@/services/api';
+import { documentAPI } from '@/services/document';
 
 const { confirm } = Modal;
 const { TextArea } = Input;
